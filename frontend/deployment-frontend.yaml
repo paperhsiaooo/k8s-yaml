@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  replicas: 1
+  revisionHistoryLimit: 5
+  replicas: 3
   selector:
     matchLabels:
       app: nextjs-frontend
