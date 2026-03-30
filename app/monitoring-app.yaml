@@ -15,7 +15,7 @@ spec:
           # $values 是指向下面第二個 source (ref: values) 的別名
           - $values/monitoring/values-kube-prometheus-stack.yaml
     # Source 2: 你自己的 Git repo（放 values 檔）
-    - repoURL: https://github.com/paperhsiaooo/k8s-yaml.git
+    - repoURL: https://github.com/paperhsiaooo/k8s-yaml
       targetRevision: main
       ref: values
   destination:
