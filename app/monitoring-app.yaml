@@ -5,21 +5,12 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  sources:
-    # Source 1: 遠端 Helm chart
-    - repoURL: https://prometheus-community.github.io/helm-charts
-      chart: kube-prometheus-stack
-      targetRevision: '*'
-      helm:
-        valueFiles:
-          # $values 是指向下面第二個 source (ref: values) 的別名
-          - $values/monitoring/values-kube-prometheus-stack.yaml
-    # Source 2: 你自己的 Git repo（放 values 檔）
-    - repoURL: https://github.com/paperhsiaooo/k8s-yaml.git
-      targetRevision: main
-      ref: values
+  source:  # 👈 注意！退回單數的 source，不掛載 Git 了
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    chart: kube-prometheus-stack
+    targetRevision: '*'
   destination:
-    server: https://kubernetes.default.svc
+    server: 'https://kubernetes.default.svc'
     namespace: monitoring
   syncPolicy:
     automated:
