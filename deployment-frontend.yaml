@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextjs-frontend
+  template:
+    metadata:
+      labels:
+        app: nextjs-frontend
+    spec:
+      containers:
+      - name: frontend-app
+        image: website-nextjs:v3  # 我們先用這個輕量映像檔來模擬網頁前端
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: frontend-config

@@ -1,0 +1,37 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "i18n-ally.localesPaths": ["src/locales", "src/locales/langs"],
+  "cSpell.words": [
+    "clsx",
+    "Finca",
+    "fontsource",
+    "hookform",
+    "Iconify",
+    "initate",
+    "languagedetector",
+    "Mikava",
+    "nextjs",
+    "nextui",
+    "noreferrer",
+    "noto",
+    "nprogress",
+    "nunito",
+    "nuqs",
+    "Orea",
+    "Pointory",
+    "rootclassname",
+    "shadcn",
+    "simplebar",
+    "sonner",
+    "stylis",
+    "Swiper",
+    "tabler",
+    "tailwindcss",
+    "yile"
+  ]
+}

@@ -1,0 +1,17 @@
+image:
+  repository: provectuslabs/kafka-ui
+  tag: master
+
+extraEnv:
+  - name: KAFKA_CLUSTERS_0_NAME
+    value: "Minikube-Kafka"
+  - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+    value: "my-kafka-broker-headless.default.svc.cluster.local:9092"
+  - name: KAFKA_CLUSTERS_0_AUTHENTICATION_TYPE
+    value: "SASL"
+  - name: KAFKA_CLUSTERS_0_AUTHENTICATION_MECHANISM
+    value: "PLAIN"
+  - name: KAFKA_CLUSTERS_0_AUTHENTICATION_USERNAME
+    value: "user1"
+  - name: KAFKA_CLUSTERS_0_AUTHENTICATION_PASSWORD
+    value: "GCbMJuSBRM"

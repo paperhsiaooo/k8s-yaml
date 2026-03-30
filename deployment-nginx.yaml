@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: my-nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:                   # 決定要把檔案放在容器裡的哪個資料夾
+        - name: config-volume
+          mountPath: /etc/nginx/conf.d
+      volumes:                          # 宣告我們要拿 ConfigMap 當作資料來源
+      - name: config-volume
+        configMap:
+          name: nginx-config

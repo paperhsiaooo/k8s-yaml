@@ -1,0 +1,9 @@
+config:
+  kafka:
+    brokers:
+      - my-kafka-broker-headless.default.svc.cluster.local:9092
+    sasl:
+      enabled: true
+      mechanism: PLAIN
+      username: "user1"
+      password: "GCbMJuSBRM"

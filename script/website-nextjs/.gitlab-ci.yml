@@ -1,0 +1,66 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  DEPLOY_ENV:
+    value: ''
+    description: '部署環境: dev / qa / staging / production'
+
+include:
+  - project: 'Pointory/cicd_config'
+    ref: 'main'
+    file:
+      - '/gcloud-auth.yaml'
+      - 'new-build-by-tag.yaml'
+      - 'new-deploy.yaml'
+
+stages:
+  - gcloud
+  - buildByTag
+  - publish
+  - deploy
+
+publish:
+  image: gcr.io/kaniko-project/executor:debug
+  stage: publish
+  dependencies:
+    - buildByTag
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+(-[a-zA-Z0-9]{1,5})?$/ && $DEPLOY_ENV'
+    - if: '$CI_COMMIT_BRANCH == "ci-test"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+  artifacts:
+    untracked: true
+    expire_in: 30min
+  extends:
+    - .gcloud:auth
+  before_script:
+    - source ./shared-env.sh
+    - ls -l ./shared-env.sh & cat ./shared-env.sh
+    - echo "REPO_NAME  ${REPO_NAME}" # 確保這行是字符串格式
+    # 根據分支決定 HOST_PATH
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "develop" ] || [ "$CI_COMMIT_BRANCH" = "ci-test" ] || [ "$DEPLOY_ENV" = "dev" ]; then
+        export RUN_MODE="dev"
+        export HOST_PATH="${DEV_HOST_PATH}"
+      elif [ "$DEPLOY_ENV" = "qa" ]; then
+        export RUN_MODE="qa"
+        export HOST_PATH="${QA_HOST_PATH}"
+      elif [ "$DEPLOY_ENV" = "staging" ]; then
+        export RUN_MODE="staging"
+        export HOST_PATH="${STAGING_HOST_PATH}"
+      elif [ "$DEPLOY_ENV" = "production" ]; then
+        export RUN_MODE="prod"
+        export HOST_PATH="${PROD_HOST_PATH}"
+      else
+        export RUN_MODE="dev"
+        export HOST_PATH="${DEV_HOST_PATH}"
+      fi
+    - echo "HOST_PATH=>$HOST_PATH"
+    - echo "RUN_MODE=>$RUN_MODE"
+  script:
+    - export destinationPath=${GCP_ARTIFACT_REGISTRY_PREFIX_PATH}/${REPO_NAME}/${PROJECT_NAME}:${PROJECT_TAG}
+    - echo "destinationPath=>$destinationPath"
+    - echo "HOST_PATH=>$HOST_PATH"
+    - echo "RUN_MODE=>$RUN_MODE"
+    - executor --dockerfile Dockerfile --context ./ --build-arg gofilename=${REPO_NAME} --build-arg goversion=${PROJECT_TAG} --build-arg hostpath=${HOST_PATH} --build-arg gaId=${GA_ID} --build-arg allowIndexing=${ALLOW_INDEXING} --build-arg runMode=${RUN_MODE} --destination $destinationPath
+  tags:
+    - golang

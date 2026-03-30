@@ -1,0 +1,5 @@
+export { default as HomeView } from './home-view'
+export { default as MainView } from './main-view'
+export { default as NewsView } from './news-view'
+export { default as ProductsView } from './products-view'
+export { default as TaskView } from './task-view'

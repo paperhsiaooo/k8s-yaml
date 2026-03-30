@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: NodePort      # 我們選擇在叢集大門開洞的方式
+  selector:
+    app: nginx        # 告訴總機：請把流量轉接給貼有這個標籤的 Pod
+  ports:
+  - port: 80          # 總機自己監聽的通道
+    targetPort: 80    # 轉發給 Pod 的通道 (Nginx 預設是 80)
