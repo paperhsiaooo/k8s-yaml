@@ -9,6 +9,7 @@ spec:
     # Source 1: 遠端 Helm chart
     - repoURL: https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
+      targetRevision: '*'
       helm:
         valueFiles:
           # $values 是指向下面第二個 source (ref: values) 的別名
